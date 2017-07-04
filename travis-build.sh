@@ -19,7 +19,7 @@ echo Building graphiql: $DOCKER_IMAGE
 
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 
-if [ "${TRAVIS_PULL_REQUEST}" == "false" ] then
+if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   DOCKER_IMAGE=$ORG/graphiql:${DOCKER_TAG}
   echo Pushing container: $DOCKER_IMAGE
   docker tag ${DOCKER_IMAGE} ${LATEST_IMAGE}
