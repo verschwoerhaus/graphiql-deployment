@@ -1,7 +1,6 @@
 sudo: required
 branches:
   only:
-    - master
     - initial
 
 services: docker
