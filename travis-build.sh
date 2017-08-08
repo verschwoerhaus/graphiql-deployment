@@ -29,9 +29,9 @@ if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
   else
     echo "processing master build $TRAVIS_COMMIT"
     docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
+    docker login -u ${DOCKER_USER} -p ${DOCKER_AUTH}
     docker push ${DOCKER_IMAGE}
     docker tag ${DOCKER_IMAGE} ${LATEST_IMAGE}
-    docker login -u ${DOCKER_USER} -p ${DOCKER_AUTH}
     docker push ${LATEST_IMAGE}
   fi
 else
