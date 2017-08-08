@@ -9,7 +9,7 @@ set -e
 #DOCKER_AUTH
 
 ORG=${ORG:-hsldevcom}
-DOCKER_TAG=${TRAVIS_BUILD_ID:-latest}
+DOCKER_TAG=${TRAVIS_COMMIT:-latest}
 DOCKER_IMAGE=$ORG/graphiql:${DOCKER_TAG}
 LATEST_IMAGE=$ORG/graphiql:latest
 PROD_IMAGE=$ORG/graphiql:prod
