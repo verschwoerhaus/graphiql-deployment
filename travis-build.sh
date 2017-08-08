@@ -20,11 +20,22 @@ echo Building graphiql: $DOCKER_IMAGE
 docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 
 if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
-  DOCKER_IMAGE=$ORG/graphiql:${DOCKER_TAG}
-  echo Pushing container: ${LATEST_IMAGE}
-  docker tag ${DOCKER_IMAGE} ${LATEST_IMAGE}
-  docker login -u ${DOCKER_USER} -p ${DOCKER_AUTH}
-  docker push ${LATEST_IMAGE}
+  if [ "$TRAVIS_TAG" ];then
+    echo "processing release $TRAVIS_TAG"
+    #release do not rebuild, just tag
+    docker pull ${DOCKER_IMAGE}
+    docker tag ${DOCKER_IMAGE} ${PROD_IMAGE}
+    docker push ${PROD_IMAGE}
+  else
+    echo "processing master build $TRAVIS_COMMIT"
+    docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
+    docker push ${DOCKER_IMAGE}
+    docker tag ${DOCKER_IMAGE} ${LATEST_IMAGE}
+    docker login -u ${DOCKER_USER} -p ${DOCKER_AUTH}
+    docker push ${LATEST_IMAGE}
+  fi
+else
+  docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 fi
 
 echo Build completed
