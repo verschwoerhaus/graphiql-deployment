@@ -25,6 +25,7 @@ if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
     #release do not rebuild, just tag
     docker pull ${DOCKER_IMAGE}
     docker tag ${DOCKER_IMAGE} ${PROD_IMAGE}
+    docker login -u ${DOCKER_USER} -p ${DOCKER_AUTH}
     docker push ${PROD_IMAGE}
   else
     echo "processing master build $TRAVIS_COMMIT"
