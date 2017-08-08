@@ -33,6 +33,7 @@ if [ "${TRAVIS_PULL_REQUEST}" == "false" ]; then
     docker tag ${DOCKER_IMAGE} ${LATEST_IMAGE}
     docker login -u ${DOCKER_USER} -p ${DOCKER_AUTH}
     docker push ${LATEST_IMAGE}
+  fi
 else
   docker build  --tag=$DOCKER_IMAGE -f Dockerfile .
 fi
