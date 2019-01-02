@@ -11,7 +11,8 @@ const digitransitUrl = (router) => (url || `${URL_PREFIX}/routing/v1/routers/${
 const config =  {
   'waltti': digitransitUrl('waltti'),
   'hsl': digitransitUrl('hsl'),
-  'finland': digitransitUrl('finland')
+  'finland': digitransitUrl('finland'),
+  'next-hsl': digitransitUrl('next-hsl')
 }
 
 app.use('/graphiql/:router', (req,res)=>{
