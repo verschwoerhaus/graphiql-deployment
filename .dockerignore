@@ -3,7 +3,7 @@
 travis-build.sh
 Dockerfile
 node_modules
-public/
+build/
 .cache/
 .vscode/
 .idea
