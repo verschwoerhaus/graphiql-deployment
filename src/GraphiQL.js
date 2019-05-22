@@ -70,6 +70,7 @@ class CustomGraphiQL extends React.Component {
             title="Show History"
             label="History"
           />
+          <span style={{ paddingTop: 3 }}>Endpoint:</span>
           <GraphiQL.Select label="Endpoint" title="Change GraphQL endpoint">
             {
                 this.props.configs.map(config =>
@@ -83,6 +84,7 @@ class CustomGraphiQL extends React.Component {
                 )
             }
           </GraphiQL.Select>
+          <span style={{ paddingTop: 3 }}>API version:</span>
           <GraphiQL.Select label="API version" title="Change API version">
             <GraphiQL.SelectOption 
                 title="Production"
