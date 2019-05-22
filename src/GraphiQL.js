@@ -3,9 +3,9 @@ import { Route, withRouter } from 'react-router-dom';
 import GraphiQL from 'graphiql';
 import 'graphiql/graphiql.css';
 
-const digitransitUrl = router => `https://api.digitransit.fi/routing/v1/routers/${router}/index/graphql`
+const digitransitUrl = (apiType, router) => `https://${apiType === 'dev' ? 'dev-api' : 'api'}.digitransit.fi/routing/v1/routers/${router}/index/graphql`
 
-const graphQLFetcher = router => graphQLParams => fetch(digitransitUrl(router), {
+const graphQLFetcher = (apiType, router) => graphQLParams => fetch(digitransitUrl(apiType, router), {
   method: 'post',
   headers: { 'Content-Type': 'application/json' },
   body: JSON.stringify(graphQLParams),
@@ -27,7 +27,7 @@ class CustomGraphiQL extends React.Component {
                   decodeURIComponent(urlSearchParams.get('operationName')) :
                   props.location.state && props.location.state.operationName
 
-    this.state = { query, variables, operationName }
+    this.state = { query, variables, operationName, apiType: window.location.hostname === 'api.digitransit.fi' ? 'prod' : 'dev' }
 
     this.graphiql = React.createRef()
   }
@@ -44,14 +44,14 @@ class CustomGraphiQL extends React.Component {
       this.props.replace({ search: "?"+urlSearchParams.toString() })
     }
 
-    return this.props.location.pathname !== nextProps.location.pathname
+    return this.props.location.pathname !== nextProps.location.pathname || this.state.apiType !== nextState.apiType
   }
 
   render() {
     return (
       <GraphiQL 
         ref={this.graphiql} 
-        fetcher={graphQLFetcher(this.props.router)}
+        fetcher={graphQLFetcher(this.state.apiType, this.props.router)}
         query={this.state.query ? this.state.query : undefined}
         variables={this.state.variables ? this.state.variables : undefined}
         operationName={this.state.operationName ? this.state.operationName : undefined}
@@ -82,6 +82,20 @@ class CustomGraphiQL extends React.Component {
                     />
                 )
             }
+          </GraphiQL.Select>
+          <GraphiQL.Select label="API version" title="Change API version">
+            <GraphiQL.SelectOption 
+                title="Production"
+                label="Production"
+                selected={this.state.apiType === 'prod'}
+                onSelect={() => this.setState({ apiType: 'prod' })}
+            />
+            <GraphiQL.SelectOption 
+                title="Development"
+                label="Development"
+                selected={this.state.apiType === 'dev'}
+                onSelect={() => this.setState({ apiType: 'dev' })}
+            />
           </GraphiQL.Select>
         </GraphiQL.Toolbar>
       </GraphiQL>
