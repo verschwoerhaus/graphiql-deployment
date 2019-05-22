@@ -37,9 +37,9 @@ class CustomGraphiQL extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.query !== nextState.query || this.state.variables !== nextState.variables || this.state.operationName !== nextState.operationName) {
       const urlSearchParams = new URLSearchParams()
-      this.state.query && urlSearchParams.set('query', encodeURIComponent(this.state.query))
-      this.state.variables && urlSearchParams.set('variables', encodeURIComponent(this.state.variables))
-      this.state.operationName && urlSearchParams.set('operationName', encodeURIComponent(this.state.operationName))
+      nextState.query && urlSearchParams.set('query', encodeURIComponent(nextState.query))
+      nextState.variables && urlSearchParams.set('variables', encodeURIComponent(nextState.variables))
+      nextState.operationName && urlSearchParams.set('operationName', encodeURIComponent(nextState.operationName))
 
       this.props.replace({ search: "?"+urlSearchParams.toString() })
     }
