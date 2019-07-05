@@ -23,8 +23,8 @@ class CustomGraphiQL extends React.Component {
     const variables = urlSearchParams.has('variables') && decodeURIComponent(urlSearchParams.get('variables'))
     const operationName = urlSearchParams.has('operationName') && decodeURIComponent(urlSearchParams.get('operationName'))
 
-    this.state = { query, variables, operationName, apiType: window.location.hostname === 'api.digitransit.fi' ? 'prod' : 'dev' }
-
+    this.state = { query, variables, operationName, apiType: (!!props.location.state && props.location.state.apiType) || (window.location.hostname === 'api.digitransit.fi' ? 'prod' : 'dev') }
+    
     this.graphiql = React.createRef()
   }
 
@@ -79,7 +79,11 @@ class CustomGraphiQL extends React.Component {
                         title={config.title}
                         label={config.title}
                         selected={this.isSelected(config)}
-                        onSelect={() => this.props.push({ pathname: `/${config.router}`, search: this.getSearchParams(this.state.query, this.state.variables, this.state.operationName) })}
+                        onSelect={() => this.props.push({ 
+                          pathname: `/${config.router}`, 
+                          search: this.getSearchParams(this.state.query, this.state.variables, this.state.operationName), 
+                          state: { apiType: this.state.apiType } 
+                        })}
                     />
                 )
             }
