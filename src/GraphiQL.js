@@ -19,15 +19,9 @@ class CustomGraphiQL extends React.Component {
 
     const urlSearchParams = new URLSearchParams(props.location.search)
 
-    const query = urlSearchParams.has('query') ?
-                  decodeURIComponent(urlSearchParams.get('query')) :
-                  props.location.state && props.location.state.query
-    const variables = urlSearchParams.has('variables') ?
-                  decodeURIComponent(urlSearchParams.get('variables')) :
-                  props.location.state && props.location.state.variables
-    const operationName = urlSearchParams.has('operationName') ?
-                  decodeURIComponent(urlSearchParams.get('operationName')) :
-                  props.location.state && props.location.state.operationName
+    const query = urlSearchParams.has('query') && decodeURIComponent(urlSearchParams.get('query'))
+    const variables = urlSearchParams.has('variables') && decodeURIComponent(urlSearchParams.get('variables'))
+    const operationName = urlSearchParams.has('operationName') && decodeURIComponent(urlSearchParams.get('operationName'))
 
     this.state = { query, variables, operationName, apiType: window.location.hostname === 'api.digitransit.fi' ? 'prod' : 'dev' }
 
@@ -36,14 +30,18 @@ class CustomGraphiQL extends React.Component {
 
   isSelected = config => config.router === this.props.router
 
+  getSearchParams = (query, variables, operationName) => {
+    const urlSearchParams = new URLSearchParams()
+    query && urlSearchParams.set('query', encodeURIComponent(query))
+    variables && urlSearchParams.set('variables', encodeURIComponent(variables))
+    operationName && urlSearchParams.set('operationName', encodeURIComponent(operationName))
+
+    return `?${urlSearchParams.toString()}`
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     if (this.state.query !== nextState.query || this.state.variables !== nextState.variables || this.state.operationName !== nextState.operationName) {
-      const urlSearchParams = new URLSearchParams()
-      nextState.query && urlSearchParams.set('query', encodeURIComponent(nextState.query))
-      nextState.variables && urlSearchParams.set('variables', encodeURIComponent(nextState.variables))
-      nextState.operationName && urlSearchParams.set('operationName', encodeURIComponent(nextState.operationName))
-
-      this.props.replace({ search: "?"+urlSearchParams.toString() })
+      this.props.replace({ search: this.getSearchParams(nextState.query, nextState.variables, nextState.operationName)})
     }
 
     return this.props.location.pathname !== nextProps.location.pathname || this.state.apiType !== nextState.apiType
@@ -81,7 +79,7 @@ class CustomGraphiQL extends React.Component {
                         title={config.title}
                         label={config.title}
                         selected={this.isSelected(config)}
-                        onSelect={() => this.props.push({ pathname: "/"+config.router, state: this.state })}
+                        onSelect={() => this.props.push({ pathname: `/${config.router}`, search: this.getSearchParams(this.state.query, this.state.variables, this.state.operationName) })}
                     />
                 )
             }
