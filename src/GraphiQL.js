@@ -5,7 +5,7 @@ import 'graphiql/graphiql.css';
 
 import './fix.css';
 
-const digitransitUrl = (apiType, router) => `https://${apiType === 'dev' ? 'dev-api' : 'api'}.digitransit.fi/routing/v1/routers/${router}/index/graphql`
+const digitransitUrl = (apiType, router) => `https://${apiType === 'dev' ? 'dev-next-api' : 'api'}.digitransit.fi/apis/routing/v1/routers/${router}/index/graphql`
 
 const graphQLFetcher = (apiType, router) => graphQLParams => fetch(digitransitUrl(apiType, router), {
   method: 'post',
