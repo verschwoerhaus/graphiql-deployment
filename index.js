@@ -12,7 +12,9 @@ const config =  {
   'waltti': digitransitUrl('waltti'),
   'hsl': digitransitUrl('hsl'),
   'finland': digitransitUrl('finland'),
-  'next-hsl': digitransitUrl('next-hsl')
+  'next-hsl': digitransitUrl('next-hsl'),
+  'ulm': digitransitUrl('ulm'),
+  'vsh': digitransitUrl('vsh'),
 }
 
 app.use('/graphiql/:router', (req,res)=>{
